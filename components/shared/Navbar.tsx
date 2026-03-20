@@ -7,12 +7,15 @@ import { Menu, X } from "lucide-react";
 import { GlowPressable } from "@/components/ui/pointer-glow";
 import { cn } from "@/lib/utils";
 
-const leftLinks = [
+/** Section anchors (Shop / Education are placeholders for future pages). */
+const primaryNav = [
   { label: "Story", hash: "story" },
   { label: "Craft", hash: "craft" },
+  { label: "Shop", hash: "shop" },
+  { label: "Education", hash: "education" },
 ];
 
-const rightLinks = [{ label: "Contact", hash: "contact" }];
+const ctaNav = [{ label: "Contact", hash: "contact" }];
 
 function useSectionHash() {
   const [hash, setHash] = useState("");
@@ -30,19 +33,43 @@ function useSectionHash() {
   return hash;
 }
 
-function OrganicEdge({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 1440 24"
-      preserveAspectRatio="none"
-      className={cn("w-full h-[14px] md:h-[18px] block", className)}
-      aria-hidden="true"
-    >
-      <path
-        d="M0,0 L1440,0 L1440,5 C1416,6 1392,3 1368,4 C1344,5 1320,2 1296,3 C1272,4 1248,2 1224,1 C1200,0 1176,3 1152,2 C1128,1 1104,3 1080,4 C1056,5 1032,3 1008,2 C984,1 960,4 936,3 C912,2 888,5 864,4 C840,3 816,5 792,6 C768,7 744,4 720,5 C696,6 672,3 648,4 C624,5 600,8 576,7 C552,6 528,9 504,8 C480,7 456,9 432,10 C408,11 384,8 360,9 C336,10 312,13 288,12 C264,11 240,13 216,15 C192,17 168,14 144,16 C120,18 96,21 72,20 C48,19 24,22 0,24 Z"
-        fill="currentColor"
-      />
-    </svg>
+/**
+ * Inset + optional left rail. Cool slate inset (not parchment) avoids a warm “yellow”
+ * cast. Contact = steel fill + transparent left rail until active (no cream border).
+ * Nav uses showSheen={false} so pointer gradient can’t pool on the left edge.
+ */
+function navControlClasses({
+  isActive,
+  emphasis,
+  mobile = false,
+  rail = false,
+}: {
+  isActive: boolean;
+  emphasis: boolean;
+  mobile?: boolean;
+  rail?: boolean;
+}) {
+  const size = mobile
+    ? "min-h-[52px] min-w-[min(18rem,85vw)] justify-center px-10 py-3.5 text-sm tracking-[0.2em] sm:text-base"
+    : rail
+      ? "w-full justify-start px-4 py-3 text-xs"
+      : "px-4 py-2.5 md:px-5 tracking-[0.15em]";
+
+  const insetTop = "shadow-[inset_0_1px_0_0_rgba(107,143,130,0.16)]";
+
+  return cn(
+    "inline-flex rounded-sm font-mono uppercase",
+    "border-l-2",
+    "transition-[border-color,background-color,box-shadow,color] duration-300 ease-out motion-reduce:transition-none",
+    insetTop,
+    size,
+    emphasis
+      ? isActive
+        ? "border-l-accent-gold bg-steel/30 text-white shadow-[inset_0_0_28px_-12px_rgba(212,165,116,0.14),inset_0_1px_0_0_rgba(107,143,130,0.2)]"
+        : "border-l-transparent bg-steel/[0.14] text-parchment hover:border-l-slate/45 hover:bg-steel/22 hover:text-white hover:shadow-[inset_0_1px_0_0_rgba(107,143,130,0.18)]"
+      : isActive
+        ? "border-l-accent-gold bg-parchment/[0.09] text-white shadow-[inset_0_0_22px_-14px_rgba(212,165,116,0.11),inset_0_1px_0_0_rgba(107,143,130,0.2)]"
+        : "border-l-transparent bg-parchment/[0.035] text-parchment hover:border-l-accent-gold/45 hover:bg-parchment/[0.08] hover:text-white hover:shadow-[inset_0_1px_0_0_rgba(107,143,130,0.18),inset_0_-14px_24px_-20px_rgba(212,165,116,0.055)]"
   );
 }
 
@@ -51,11 +78,15 @@ function NavAnchor({
   label,
   isActive,
   onClick,
+  emphasis = false,
+  rail = false,
 }: {
   hash: string;
   label: string;
   isActive: boolean;
   onClick?: () => void;
+  emphasis?: boolean;
+  rail?: boolean;
 }) {
   return (
     <GlowPressable
@@ -64,23 +95,11 @@ function NavAnchor({
       onClick={onClick}
       surface="dark"
       sheenRadius="md"
-      innerClassName="relative gap-0"
-      className={cn(
-        "inline-flex rounded-md px-3 py-2 font-mono text-xs uppercase tracking-[0.15em]",
-        "transition-colors duration-300 hover:text-white",
-        isActive ? "text-white" : "text-parchment"
-      )}
+      showSheen={false}
+      innerClassName="relative z-[2] gap-0"
+      className={cn("text-xs", navControlClasses({ isActive, emphasis, rail }))}
     >
-      <span className="relative inline-block">
-        {label}
-        {isActive && (
-          <motion.span
-            layoutId="nav-underline"
-            className="absolute -bottom-1 left-0 right-0 h-px bg-accent-gold"
-            transition={{ type: "spring", stiffness: 380, damping: 30 }}
-          />
-        )}
-      </span>
+      <span className="relative inline-block">{label}</span>
     </GlowPressable>
   );
 }
@@ -118,9 +137,20 @@ const mobileNavItem = {
   },
 };
 
+function menuButtonClasses() {
+  return cn(
+    "flex h-11 w-11 shrink-0 items-center justify-center rounded-sm",
+    "border-l-2 border-l-slate/35 bg-parchment/[0.04] text-parchment",
+    "shadow-[inset_0_1px_0_0_rgba(107,143,130,0.14)]",
+    "transition-[border-color,background-color,color] duration-300",
+    "hover:border-l-slate/55 hover:bg-parchment/[0.07] hover:text-white",
+    "active:opacity-90"
+  );
+}
+
 export default function Navbar() {
   const sectionHash = useSectionHash();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -130,7 +160,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (mobileOpen) {
+    if (menuOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -138,37 +168,43 @@ export default function Navbar() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileOpen]);
+  }, [menuOpen]);
 
   useEffect(() => {
-    const close = () => setMobileOpen(false);
+    const close = () => setMenuOpen(false);
     window.addEventListener("hashchange", close);
     return () => window.removeEventListener("hashchange", close);
   }, []);
 
-  const allLinks = [...leftLinks, ...rightLinks];
+  const allLinks = [...primaryNav, ...ctaNav];
+  const isEmphasisLink = (hash: string) =>
+    ctaNav.some((r) => r.hash === hash);
 
   return (
     <>
+      {/* Desktop: pinned rail on the right */}
       <nav
+        aria-label="Primary"
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 bg-midnight transition-shadow duration-500",
-          scrolled && "shadow-nav"
+          "fixed right-0 top-0 z-50 hidden h-screen w-52 flex-col border-l border-slate/25 bg-midnight lg:flex",
+          "transition-[box-shadow] duration-500",
+          scrolled && "shadow-[-12px_0_32px_-8px_rgba(0,0,0,0.35)]"
         )}
       >
-        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 md:h-[72px] lg:px-12">
+        <div className="flex flex-1 flex-col gap-1 overflow-y-auto overscroll-contain p-3 pt-6">
           <GlowPressable
             type="button"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => setMenuOpen((o) => !o)}
             surface="dark"
             sheenRadius="md"
+            showSheen={false}
             innerClassName="gap-0"
-            className="relative z-50 flex h-11 w-11 items-center justify-center rounded-lg text-parchment transition-colors hover:text-white lg:hidden"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
+            className={cn(menuButtonClasses(), "mb-3 self-end")}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
           >
             <AnimatePresence mode="wait" initial={false}>
-              {mobileOpen ? (
+              {menuOpen ? (
                 <motion.div
                   key="close"
                   initial={{ opacity: 0, rotate: -90 }}
@@ -176,7 +212,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, rotate: 90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <X size={24} />
+                  <X size={22} />
                 </motion.div>
               ) : (
                 <motion.div
@@ -186,100 +222,132 @@ export default function Navbar() {
                   exit={{ opacity: 0, rotate: -90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Menu size={24} />
+                  <Menu size={22} />
                 </motion.div>
               )}
             </AnimatePresence>
           </GlowPressable>
 
-          <div className="hidden items-center gap-8 lg:flex">
-            {leftLinks.map((link) => (
-              <NavAnchor
-                key={link.hash}
-                hash={link.hash}
-                label={link.label}
-                isActive={sectionHash === link.hash}
-              />
-            ))}
-          </div>
-
-          <Link
-            href="/#hero"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 hover:opacity-80"
-            aria-label="Firefly Organics — Home"
-          >
-            <span className="font-display text-xl md:text-2xl font-bold tracking-tight text-parchment">
-              Firefly Organics
-            </span>
-          </Link>
-
-          <div className="hidden items-center gap-8 lg:flex">
-            {rightLinks.map((link) => (
-              <NavAnchor
-                key={link.hash}
-                hash={link.hash}
-                label={link.label}
-                isActive={sectionHash === link.hash}
-              />
-            ))}
-          </div>
-
-          <div className="w-11 lg:hidden" />
+          {primaryNav.map((link) => (
+            <NavAnchor
+              key={link.hash}
+              hash={link.hash}
+              label={link.label}
+              isActive={sectionHash === link.hash}
+              rail
+            />
+          ))}
+          {ctaNav.map((link) => (
+            <NavAnchor
+              key={link.hash}
+              hash={link.hash}
+              label={link.label}
+              isActive={sectionHash === link.hash}
+              emphasis
+              rail
+            />
+          ))}
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 translate-y-full text-midnight pointer-events-none">
-          <OrganicEdge />
+        <div className="border-t border-slate/20 p-4">
+          <Link
+            href="/#hero"
+            className="font-display text-base font-bold leading-tight text-parchment transition-opacity hover:opacity-80"
+          >
+            Firefly Organics
+          </Link>
         </div>
       </nav>
 
-      <div className="h-16 md:h-[72px]" />
+      {/* Mobile: same hamburger, fixed top-right (sits above content; rail hidden) */}
+      <GlowPressable
+        type="button"
+        onClick={() => setMenuOpen((o) => !o)}
+        surface="dark"
+        sheenRadius="md"
+        showSheen={false}
+        innerClassName="gap-0"
+        className={cn(
+          menuButtonClasses(),
+          "fixed right-4 top-4 z-[60] lg:hidden"
+        )}
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {menuOpen ? (
+            <motion.div
+              key="close-m"
+              initial={{ opacity: 0, rotate: -90 }}
+              animate={{ opacity: 1, rotate: 0 }}
+              exit={{ opacity: 0, rotate: 90 }}
+              transition={{ duration: 0.2 }}
+            >
+              <X size={24} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="menu-m"
+              initial={{ opacity: 0, rotate: 90 }}
+              animate={{ opacity: 1, rotate: 0 }}
+              exit={{ opacity: 0, rotate: -90 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Menu size={24} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </GlowPressable>
+
+      {/* Wordmark: centered in content area; clears hamburger on mobile */}
+      <div className="pointer-events-none fixed left-0 right-0 top-4 z-40 flex justify-center px-16 lg:top-6 lg:pl-8 lg:pr-60">
+        <Link
+          href="/#hero"
+          className="pointer-events-auto text-center transition-opacity duration-300 hover:opacity-80"
+          aria-label="Firefly Organics — Home"
+        >
+          <span className="font-display text-lg font-bold tracking-tight text-parchment sm:text-xl md:text-2xl">
+            Firefly Organics
+          </span>
+        </Link>
+      </div>
 
       <AnimatePresence>
-        {mobileOpen && (
+        {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-midnight/90 backdrop-blur-md lg:hidden"
+            className="fixed inset-0 z-[55] bg-midnight/92 backdrop-blur-md"
             {...mobileOverlay}
+            role="presentation"
+            onClick={() => setMenuOpen(false)}
           >
             <motion.div
-              className="flex h-full flex-col items-center justify-center gap-2"
+              className="flex h-full flex-col items-center justify-center gap-2 px-6"
               variants={mobileNavContainer}
               initial="initial"
               animate="animate"
               exit="exit"
+              onClick={(e) => e.stopPropagation()}
             >
               {allLinks.map((link) => (
                 <motion.div key={link.hash} variants={mobileNavItem}>
                   <GlowPressable
                     as="a"
                     href={`#${link.hash}`}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => setMenuOpen(false)}
                     surface="dark"
                     sheenRadius="md"
-                    innerClassName="relative flex flex-col items-center gap-1"
-                    className={cn(
-                      "inline-flex min-h-[44px] min-w-[44px] rounded-lg px-8 py-4 text-center font-mono text-lg uppercase tracking-[0.2em]",
-                      "transition-colors duration-300",
-                      sectionHash === link.hash
-                        ? "text-white"
-                        : "text-parchment/80 hover:text-white"
-                    )}
+                    showSheen={false}
+                    innerClassName="relative z-[2] flex flex-col items-center justify-center gap-0 text-center"
+                    className={navControlClasses({
+                      isActive: sectionHash === link.hash,
+                      emphasis: isEmphasisLink(link.hash),
+                      mobile: true,
+                    })}
                   >
                     {link.label}
-                    {sectionHash === link.hash && (
-                      <span className="mx-auto mt-1 block h-px w-8 bg-accent-gold" />
-                    )}
                   </GlowPressable>
                 </motion.div>
               ))}
-
-              <motion.div
-                variants={mobileNavItem}
-                className="absolute bottom-12 opacity-20"
-              >
-                <span className="font-display text-4xl text-parchment">
-                  Firefly Organics
-                </span>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}

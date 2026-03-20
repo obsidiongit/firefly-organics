@@ -179,6 +179,8 @@ type GlowPressableProps = {
   as?: ElementType
   surface?: PointerGlowSurface
   sheenRadius?: "md" | "lg"
+  /** When false, skip cursor sheen (e.g. compact nav chips where warm gradient reads as edge bleed). */
+  showSheen?: boolean
   innerClassName?: string
   className?: string
   children: ReactNode
@@ -191,6 +193,7 @@ export function GlowPressable({
   as,
   surface = "light",
   sheenRadius = "md",
+  showSheen = true,
   className,
   innerClassName,
   children,
@@ -208,22 +211,32 @@ export function GlowPressable({
         "group/glow-press relative isolate overflow-hidden",
         className
       )}
-      style={{ ...glow.style, ...style }}
-      onMouseMove={(e: MouseEvent<HTMLElement>) => {
-        glow.onMouseMove(e)
-        onMouseMove?.(e)
-      }}
-      onMouseLeave={(e: MouseEvent<HTMLElement>) => {
-        glow.onMouseLeave()
-        onMouseLeave?.(e)
-      }}
+      style={showSheen ? { ...glow.style, ...style } : style}
+      onMouseMove={
+        showSheen
+          ? (e: MouseEvent<HTMLElement>) => {
+              glow.onMouseMove(e)
+              onMouseMove?.(e)
+            }
+          : onMouseMove
+      }
+      onMouseLeave={
+        showSheen
+          ? (e: MouseEvent<HTMLElement>) => {
+              glow.onMouseLeave()
+              onMouseLeave?.(e)
+            }
+          : onMouseLeave
+      }
       {...props}
     >
-      <PointerGlowSheen
-        surface={surface}
-        radius={sheenRadius}
-        stack="under"
-      />
+      {showSheen ? (
+        <PointerGlowSheen
+          surface={surface}
+          radius={sheenRadius}
+          stack="under"
+        />
+      ) : null}
       <span
         className={cn(
           "relative z-[2] flex min-h-0 min-w-0 flex-1 items-center justify-center gap-2",

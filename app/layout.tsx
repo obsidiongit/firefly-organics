@@ -23,7 +23,9 @@ export default function RootLayout({
       >
         <AgeGate />
         <Navbar />
-        <main className="relative z-[1] min-h-screen">{children}</main>
+        <main className="relative z-[1] min-h-screen pt-[4.25rem] lg:mr-52 lg:pt-8">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

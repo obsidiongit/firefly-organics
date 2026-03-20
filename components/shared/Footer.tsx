@@ -10,6 +10,8 @@ import { fadeInUp } from "@/lib/animations";
 const quickLinks = [
   { label: "Story", href: "#story" },
   { label: "Craft", href: "#craft" },
+  { label: "Shop", href: "#shop" },
+  { label: "Education", href: "#education" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -54,10 +56,7 @@ export default function Footer() {
 
   return (
     <footer className="relative z-[1] bg-midnight">
-      <div
-        className="greek-key-divider opacity-[0.45]"
-        aria-hidden="true"
-      />
+      <div className="footer-edge-blend" aria-hidden="true" />
 
       <div className="mx-auto max-w-[1440px] px-6 pt-16 pb-8 lg:px-12">
         <motion.div
