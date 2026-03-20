@@ -6,8 +6,9 @@ import AgeGate from "@/components/shared/AgeGate";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Firefly",
-  description: "Premium cannabis — craft flower and concentrates.",
+  title: "Firefly Organics",
+  description:
+    "Flower-first Maine cannabis — soil-grown, hand-trimmed, and built on quality you can count on.",
 };
 
 export default function RootLayout({

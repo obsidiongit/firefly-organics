@@ -1,26 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Leaf, FlaskConical, Sparkles } from "lucide-react";
+import { Cherry, Cookie, Flame, Grape } from "lucide-react";
 import { PointerGlowPanel } from "@/components/ui/pointer-glow";
 import { cn } from "@/lib/utils";
 import { fadeInUp } from "@/lib/animations";
 
-const pillars = [
+const strains = [
   {
-    title: "Flower",
-    body: "Indoor and sungrown lines — hero imagery and strain cards plug in here when you’re ready.",
-    icon: Leaf,
+    title: "Secret Cookies",
+    body: "Sour cherry and dough with minty citrus and fuel. Sought-after in the state — giggly, euphoric, and versatile enough for day or night. A crew favorite at Firefly.",
+    icon: Cherry,
   },
   {
-    title: "Concentrates",
-    body: "Hash, rosin, and cartridges — use the same card patterns as Helios shop or strains.",
-    icon: FlaskConical,
+    title: "Triple Chocolate Chip",
+    body: "Gassy and silky-smooth — gooey chocolate and herbal mint, with an intoxicating, laid-back high. Dense, crystal-coated nugs with standout bag appeal and smoke.",
+    icon: Cookie,
   },
   {
-    title: "Experience",
-    body: "Retail education, terpene story, and batch testing — link out to pages you’ll add next.",
-    icon: Sparkles,
+    title: "Albariño",
+    body: "Selected in-house for a loud, pungent nose — heavy citrus and sweet stone fruit. Uplifting high with flavor to match; enough personality for seasoned smokers.",
+    icon: Grape,
+  },
+  {
+    title: "Motorbreath 15",
+    body: "Chem D × SFV OG — a balance of deep body relief and the cerebral edge Chem D is known for. Legendary parents, dialed for people who want both.",
+    icon: Flame,
   },
 ];
 
@@ -36,16 +41,17 @@ export default function FireflyCraft() {
             The line
           </p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-navy">
-            Craft, without the clutter
+            Staples from our library
           </h2>
           <p className="mt-4 font-body text-steel leading-relaxed">
-            Three columns stand in for product families. Replace icons, copy, and
-            links when Firefly SKUs and menus are live.
+            Leading with Secret Cookies, with Triple Chocolate Chip, Motorbreath
+            15, and Albariño as core strains in the Firefly Organics lineup —
+            hand-finished flower you can trace from our room to the jar.
           </p>
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          {pillars.map((item) => (
+        <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+          {strains.map((item) => (
             <motion.div key={item.title} {...fadeInUp}>
               <PointerGlowPanel
                 surface="light"
@@ -72,6 +78,19 @@ export default function FireflyCraft() {
             </motion.div>
           ))}
         </div>
+
+        <motion.p
+          {...fadeInUp}
+          className="mt-14 max-w-3xl font-body text-sm text-steel leading-relaxed border-t border-steel/15 pt-10"
+        >
+          At{" "}
+          <span className="text-charcoal/90 font-medium">SeaWeed Co.</span>,
+          look for our Secret Cookies full-spectrum live resin cart — a
+          functional hybrid from Seed Junky genetics, now on the adult-use side
+          in their stores. Promos have included eighths at $30 (save $10), 1g
+          prerolls at $11 (save $4), and Secret Cookies carts at $30 (save $10)
+          — check the menu for current offers.
+        </motion.p>
       </div>
     </section>
   );

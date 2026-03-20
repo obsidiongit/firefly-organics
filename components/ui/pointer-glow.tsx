@@ -13,6 +13,9 @@ import { usePointerGlow } from "@/lib/use-pointer-glow"
 
 export type PointerGlowSurface = "light" | "dark"
 
+/** Named Tailwind `group/name` — keeps `group-hover` from matching outer panels. */
+export type PointerGlowHoverGroup = "glow-press" | "glow-panel" | "button"
+
 type SheenProps = {
   surface?: PointerGlowSurface
   /** md: controls / CTAs, lg: cards / panels */
@@ -22,7 +25,26 @@ type SheenProps = {
    * over: sheen paints on top of content so cards read a glow (still pointer-events-none).
    */
   stack?: "under" | "over"
+  /** Must match parent `group/name`. Defaults from stack (press vs panel). */
+  hoverGroup?: PointerGlowHoverGroup
 } & ComponentPropsWithoutRef<"span">
+
+function sheenHoverOpacityClasses(
+  stack: "under" | "over",
+  surface: PointerGlowSurface,
+  hoverGroup: PointerGlowHoverGroup
+): string {
+  if (stack === "over" && surface === "light") {
+    return "group-hover/glow-panel:opacity-95 group-focus-visible/glow-panel:opacity-95"
+  }
+  if (hoverGroup === "glow-press") {
+    return "group-hover/glow-press:opacity-100 group-focus-visible/glow-press:opacity-100"
+  }
+  if (hoverGroup === "glow-panel") {
+    return "group-hover/glow-panel:opacity-100 group-focus-visible/glow-panel:opacity-100"
+  }
+  return "group-hover/button:opacity-100 group-focus-visible/button:opacity-100"
+}
 
 function sheenGradient(
   surface: PointerGlowSurface,
@@ -114,22 +136,21 @@ export function PointerGlowSheen({
   surface = "light",
   radius = "md",
   stack = "under",
+  hoverGroup: hoverGroupProp,
   className,
   ...props
 }: SheenProps) {
-  const overContent = stack === "over"
+  const hoverGroup: PointerGlowHoverGroup =
+    hoverGroupProp ?? (stack === "over" ? "glow-panel" : "glow-press")
 
-  const hoverOpacity =
-    overContent && surface === "light"
-      ? "group-hover:opacity-95 group-focus-visible:opacity-95"
-      : "group-hover:opacity-100 group-focus-visible:opacity-100"
+  const hoverOpacity = sheenHoverOpacityClasses(stack, surface, hoverGroup)
 
   const blend =
     surface === "dark" && stack === "under"
       ? "mix-blend-normal"
       : surface === "dark"
         ? "mix-blend-soft-light"
-        : overContent
+        : stack === "over"
           ? "mix-blend-overlay"
           : "mix-blend-normal"
 
@@ -184,7 +205,7 @@ export function GlowPressable({
   return (
     <Component
       className={cn(
-        "group relative isolate overflow-hidden",
+        "group/glow-press relative isolate overflow-hidden",
         className
       )}
       style={{ ...glow.style, ...style }}
@@ -235,7 +256,10 @@ export function PointerGlowPanel({
 
   return (
     <div
-      className={cn("group relative isolate overflow-hidden", className)}
+      className={cn(
+        "group/glow-panel relative isolate overflow-hidden",
+        className
+      )}
       style={{ ...glow.style, ...style }}
       onMouseMove={(e) => {
         glow.onMouseMove(e)

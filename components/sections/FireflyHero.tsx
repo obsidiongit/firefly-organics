@@ -29,14 +29,15 @@ export default function FireflyHero() {
       <div className="relative z-[1] mx-auto max-w-[1440px] w-full px-6 pb-20 pt-32 lg:px-12 lg:pb-28">
         <motion.div {...fadeInUp} className="max-w-3xl">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-gold mb-4">
-            Medical &amp; recreational
+            Medical &amp; adult use
           </p>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-parchment leading-[1.05]">
-            Small-batch cannabis, built for people who notice the difference.
+            Flower first. Quality and consistency, every run.
           </h1>
           <p className="mt-6 font-body text-lg text-slate max-w-xl leading-relaxed">
-            Firefly is a placeholder showcase built from the Helios site stack —
-            editorial layout, premium type, and room to grow into a full sitemap.
+            We started in the medical program before expanding into adult use.
+            Firefly Organics is a flower-first grower — soil, organic nutrients,
+            and daily care so the plant tells us what it needs.
           </p>
           <a
             href="#story"

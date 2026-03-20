@@ -206,10 +206,10 @@ export default function Navbar() {
           <Link
             href="/#hero"
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 hover:opacity-80"
-            aria-label="Firefly — Home"
+            aria-label="Firefly Organics — Home"
           >
             <span className="font-display text-xl md:text-2xl font-bold tracking-tight text-parchment">
-              Firefly
+              Firefly Organics
             </span>
           </Link>
 
@@ -277,7 +277,7 @@ export default function Navbar() {
                 className="absolute bottom-12 opacity-20"
               >
                 <span className="font-display text-4xl text-parchment">
-                  Firefly
+                  Firefly Organics
                 </span>
               </motion.div>
             </motion.div>

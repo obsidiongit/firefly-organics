@@ -64,22 +64,22 @@ export default function Footer() {
           {...fadeInUp}
           className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8"
         >
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <PointerGlowPanel
               surface="dark"
               sheenRadius="lg"
-              className="rounded-sm border border-slate/20 p-6 lg:p-8"
+              className="min-w-0 rounded-sm border border-slate/20 p-6 lg:p-8"
             >
               <h3 className="font-display text-xl font-bold text-parchment">
                 Stay in the loop
               </h3>
               <p className="mt-2 font-body text-sm leading-relaxed text-slate">
-                Product drops and announcements — placeholder signup for the
-                Firefly launch.
+                Product drops and announcements — sign up for Firefly Organics
+                updates.
               </p>
 
-              <form onSubmit={handleSubmit} className="mt-5">
-                <div className="flex gap-3">
+              <form onSubmit={handleSubmit} className="mt-5 min-w-0">
+                <div className="flex min-w-0 gap-3">
                   <input
                     type="email"
                     value={email}
@@ -87,9 +87,9 @@ export default function Footer() {
                     placeholder="Your email"
                     required
                     className={cn(
-                      "flex-1 bg-transparent",
+                      "min-w-0 flex-1 bg-transparent",
                       "border border-parchment/30 rounded-sm",
-                      "px-4 py-2.5",
+                      "px-4 py-3",
                       "font-body text-sm text-parchment",
                       "placeholder:text-slate/50",
                       "focus:border-parchment focus:outline-none",
@@ -100,12 +100,13 @@ export default function Footer() {
                     type="submit"
                     surface="dark"
                     className={cn(
-                      "whitespace-nowrap rounded-full bg-steel px-5 py-2.5 font-mono text-xs uppercase tracking-[0.15em] text-white",
-                      "transition-all duration-300 hover:bg-navy",
-                      "active:scale-[0.97]"
+                      "inline-flex shrink-0 items-center justify-center whitespace-nowrap",
+                      "rounded-full border border-transparent bg-steel",
+                      "px-5 sm:px-8 py-3 font-mono text-xs uppercase tracking-[0.15em] text-white",
+                      "transition-all duration-300 hover:border-accent-gold/45 hover:bg-steel"
                     )}
                   >
-                    <Send size={14} />
+                    <Send size={16} />
                     <span className="hidden sm:inline">Sign up</span>
                   </GlowPressable>
                 </div>
@@ -196,7 +197,8 @@ export default function Footer() {
       <div className="border-t border-slate/20">
         <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-3 px-6 py-5 sm:flex-row lg:px-12">
           <p className="font-mono text-xs text-slate/60 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Firefly. For use by adults 21+
+            &copy; {new Date().getFullYear()} Firefly Organics. For use by adults
+            21+
             only. Comply with local law.
           </p>
           <p className="font-mono text-[10px] text-slate/40 uppercase tracking-widest">

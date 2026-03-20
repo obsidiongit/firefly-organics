@@ -80,7 +80,7 @@ function Button({
       data-slot="button"
       className={cn(
         buttonVariants({ variant, size }),
-        showGlow && "group relative isolate overflow-hidden",
+        showGlow && "relative isolate overflow-hidden",
         className
       )}
       style={showGlow ? { ...glow.style, ...style } : style}
@@ -104,7 +104,7 @@ function Button({
     >
       {showGlow ? (
         <>
-          <PointerGlowSheen surface={surface} />
+          <PointerGlowSheen surface={surface} hoverGroup="button" />
           <span
             className={cn(
               "relative z-[2] inline-flex min-h-0 min-w-0 flex-1 items-center justify-center",
