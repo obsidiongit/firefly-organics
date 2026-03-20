@@ -1,0 +1,468 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Tailwind v4 Theme Extensions ─── */
+@theme inline {
+  /* Core Palette — Dusk Canopy */
+  --color-midnight: #0f1f18;
+  --color-navy: #1e3a32;
+  --color-steel: #3d6b5c;
+  --color-slate: #6b8f82;
+  --color-parchment: #ede8dd;
+  --color-off-white: #f7f4ec;
+  --color-charcoal: #2c3532;
+  --color-accent-gold: #d4a574;
+  --color-success: #3f6f4f;
+  --color-error: #b84a45;
+
+  /* ShadCN compatibility mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Border Radii */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Font Families */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-impact: var(--font-archivo-black), "Arial Black", sans-serif;
+  --font-body: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-space-mono), "Courier New", monospace;
+
+  /* Box Shadows — tinted to midnight / steel */
+  --shadow-card: 0 2px 8px rgba(15, 31, 24, 0.06);
+  --shadow-card-hover: 0 12px 40px rgba(15, 31, 24, 0.12);
+  --shadow-nav: 0 4px 20px rgba(15, 31, 24, 0.15);
+  --shadow-glow: 0 0 40px rgba(61, 107, 92, 0.2);
+}
+
+/*
+ * Bioluminescent hover shadows — defined here (not @theme) because Tailwind v4
+ * does not emit shadow utilities for theme tokens that use color-mix() + var().
+ * Hex refs: accent-gold #d4a574, steel #3d6b5c, midnight rgb(15,31,24).
+ */
+@layer utilities {
+  /* Use Tailwind’s shadow stack so ring/focus shadows still compose. */
+  .hover\:shadow-bio-soft:hover {
+    --tw-shadow:
+      0 0 0 1px rgba(212, 165, 116, 0.22),
+      0 0 18px rgba(212, 165, 116, 0.26),
+      0 0 40px rgba(61, 107, 92, 0.16);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+      var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .hover\:shadow-bio-hover:hover {
+    --tw-shadow:
+      0 0 0 1px rgba(212, 165, 116, 0.38),
+      0 0 28px rgba(212, 165, 116, 0.36),
+      0 0 56px rgba(61, 107, 92, 0.24);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+      var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .hover\:shadow-bio-on-dark:hover {
+    --tw-shadow:
+      0 0 0 1px rgba(212, 165, 116, 0.5),
+      0 0 36px rgba(212, 165, 116, 0.42),
+      0 0 72px rgba(61, 107, 92, 0.3),
+      0 0 100px rgba(212, 165, 116, 0.14);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+      var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .hover\:shadow-card-bio-hover:hover {
+    --tw-shadow:
+      0 12px 40px rgba(15, 31, 24, 0.12),
+      0 0 0 1px rgba(212, 165, 116, 0.16),
+      0 0 32px rgba(212, 165, 116, 0.22),
+      0 0 64px rgba(61, 107, 92, 0.12);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+      var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .dark\:hover\:shadow-bio-soft:is(.dark *):hover {
+    --tw-shadow:
+      0 0 0 1px rgba(212, 165, 116, 0.22),
+      0 0 18px rgba(212, 165, 116, 0.26),
+      0 0 40px rgba(61, 107, 92, 0.16);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+      var(--tw-ring-shadow), var(--tw-shadow);
+  }
+}
+
+/* ─── CSS Custom Properties (Semantic Aliases) ─── */
+:root {
+  /* Core palette references for non-Tailwind usage */
+  --color-bg-primary: var(--color-parchment);
+  --color-bg-dark: var(--color-midnight);
+  --color-bg-card: var(--color-off-white);
+  --color-text-primary: var(--color-navy);
+  --color-text-heading: var(--color-midnight);
+  --color-text-body: var(--color-navy);
+  --color-text-muted: var(--color-slate);
+  --color-text-on-dark: var(--color-parchment);
+  --color-link: var(--color-steel);
+  --color-link-hover: var(--color-navy);
+
+  /* ShadCN variables — aligned to Dusk Canopy (parchment / evergreen / amber) */
+  --background: oklch(0.932 0.016 86.4);
+  --foreground: oklch(0.319 0.013 173.3);
+  --card: oklch(0.967 0.011 89.7);
+  --card-foreground: oklch(0.319 0.013 173.3);
+  --popover: oklch(0.967 0.011 89.7);
+  --popover-foreground: oklch(0.319 0.013 173.3);
+  --primary: oklch(0.323 0.037 173.5);
+  --primary-foreground: oklch(0.932 0.016 86.4);
+  --secondary: oklch(0.91 0.022 170);
+  --secondary-foreground: oklch(0.323 0.037 173.5);
+  --muted: oklch(0.905 0.02 168);
+  --muted-foreground: oklch(0.52 0.042 171);
+  --accent: oklch(0.94 0.028 75);
+  --accent-foreground: oklch(0.323 0.037 173.5);
+  --destructive: oklch(0.554 0.144 25.5);
+  --border: oklch(0.86 0.018 95);
+  --input: oklch(0.86 0.018 95);
+  --ring: oklch(0.49 0.057 171);
+  --chart-1: oklch(0.754 0.085 67.1);
+  --chart-2: oklch(0.498 0.074 153.7);
+  --chart-3: oklch(0.49 0.057 171);
+  --chart-4: oklch(0.619 0.045 170.6);
+  --chart-5: oklch(0.323 0.037 173.5);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.967 0.011 89.7);
+  --sidebar-foreground: oklch(0.319 0.013 173.3);
+  --sidebar-primary: oklch(0.323 0.037 173.5);
+  --sidebar-primary-foreground: oklch(0.932 0.016 86.4);
+  --sidebar-accent: oklch(0.905 0.02 168);
+  --sidebar-accent-foreground: oklch(0.323 0.037 173.5);
+  --sidebar-border: oklch(0.86 0.018 95);
+  --sidebar-ring: oklch(0.49 0.057 171);
+}
+
+.dark {
+  --background: oklch(0.222 0.026 164.6);
+  --foreground: oklch(0.932 0.016 86.4);
+  --card: oklch(0.28 0.032 166);
+  --card-foreground: oklch(0.932 0.016 86.4);
+  --popover: oklch(0.28 0.032 166);
+  --popover-foreground: oklch(0.932 0.016 86.4);
+  --primary: oklch(0.754 0.085 67.1);
+  --primary-foreground: oklch(0.222 0.026 164.6);
+  --secondary: oklch(0.32 0.038 172);
+  --secondary-foreground: oklch(0.932 0.016 86.4);
+  --muted: oklch(0.3 0.035 165);
+  --muted-foreground: oklch(0.72 0.04 168);
+  --accent: oklch(0.35 0.045 170);
+  --accent-foreground: oklch(0.932 0.016 86.4);
+  --destructive: oklch(0.65 0.18 25);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.62 0.045 170.6);
+  --chart-1: oklch(0.78 0.09 67);
+  --chart-2: oklch(0.55 0.08 154);
+  --chart-3: oklch(0.55 0.06 171);
+  --chart-4: oklch(0.65 0.05 171);
+  --chart-5: oklch(0.45 0.04 174);
+  --sidebar: oklch(0.26 0.03 166);
+  --sidebar-foreground: oklch(0.932 0.016 86.4);
+  --sidebar-primary: oklch(0.754 0.085 67.1);
+  --sidebar-primary-foreground: oklch(0.222 0.026 164.6);
+  --sidebar-accent: oklch(0.32 0.038 172);
+  --sidebar-accent-foreground: oklch(0.932 0.016 86.4);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.62 0.045 170.6);
+}
+
+/* ─── Base Resets & Typography ─── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-parchment text-navy font-body antialiased;
+  }
+
+  /* Prose readability cap */
+  p,
+  li,
+  blockquote {
+    max-width: 65ch;
+  }
+
+  /* Heading defaults */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-midnight font-display;
+    text-wrap: balance;
+  }
+
+  /* Focus states for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-steel;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-steel/20 text-midnight;
+  }
+}
+
+/* ─── Hero Genetics Carousel ─── */
+@keyframes carousel-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-carousel-scroll {
+  animation: carousel-scroll 45s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-carousel-scroll {
+    animation-play-state: paused;
+  }
+}
+
+/* ─── Greek Key / Meander Border ─── */
+.greek-key-divider {
+  background-image: url('/assets/textures/greek-key-border.svg');
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  height: 28px;
+  width: 100%;
+}
+
+/* ─── Monogram Watermark Pattern ─── */
+.bg-monogram {
+  background-image: url('/assets/logos/monogram-tile.svg'), url('/assets/logos/monogram-tile.svg');
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  background-position: 0 0, 90px 90px;
+}
+
+
+/* ─── Helios Favorites Carousel ─── */
+@keyframes favorites-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-favorites-scroll {
+  animation: favorites-scroll 55s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-favorites-scroll {
+    animation-play-state: paused;
+  }
+}
+
+/* ─── Hero Layout Utilities ─── */
+/* Left-pad that mirrors the centered max-w-[1440px] container gutter,
+   so the headline stays aligned with the rest of the site while
+   the image column extends to the viewport edge. */
+@media (min-width: 1024px) {
+  .hero-gutter-left {
+    padding-left: max(3rem, calc((100vw - 1440px) / 2 + 3rem));
+  }
+}
+
+/* ─── Editorial Frames ─── */
+/* Distinctive, asymmetric containers with a bold brand-colored accent line.
+   One corner gets a massive, sweeping curve — unmistakably intentional.
+   Combine a .frame-editorial base with a .frame-* shape variant.
+   --frame-scoop controls the dramatic radius and scales with viewport. */
+
+:root {
+  --frame-scoop: clamp(100px, 18vw, 200px);
+  --frame-scoop-sm: clamp(60px, 10vw, 120px);
+}
+
+.frame-editorial {
+  border: 2px solid var(--color-steel);
+  overflow: hidden;
+}
+
+.frame-editorial-subtle {
+  border: 1.5px solid color-mix(in srgb, var(--color-steel) 45%, transparent);
+  overflow: hidden;
+}
+
+/* Shape variants — one corner gets the massive sweep */
+.frame-scoop-bl { border-radius: 4px 4px 4px var(--frame-scoop); }
+.frame-scoop-br { border-radius: 4px 4px var(--frame-scoop) 4px; }
+.frame-scoop-tl { border-radius: var(--frame-scoop) 4px 4px 4px; }
+.frame-scoop-tr { border-radius: 4px var(--frame-scoop) 4px 4px; }
+
+/* Smaller sweep — for cards and secondary containers */
+.frame-scoop-bl-sm { border-radius: 4px 4px 4px var(--frame-scoop-sm); }
+.frame-scoop-br-sm { border-radius: 4px 4px var(--frame-scoop-sm) 4px; }
+.frame-scoop-tl-sm { border-radius: var(--frame-scoop-sm) 4px 4px 4px; }
+.frame-scoop-tr-sm { border-radius: 4px var(--frame-scoop-sm) 4px 4px; }
+
+/* Diagonal pair — two opposite corners scooped */
+.frame-scoop-diagonal-a { border-radius: 4px var(--frame-scoop-sm) 4px var(--frame-scoop-sm); }
+.frame-scoop-diagonal-b { border-radius: var(--frame-scoop-sm) 4px var(--frame-scoop-sm) 4px; }
+
+/* Fully organic — each corner different */
+.frame-organic { border-radius: 8px var(--frame-scoop-sm) 12px var(--frame-scoop); }
+
+/* ─── Utility: Hide Scrollbar ─── */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Trading Card Holographic Shimmer ─── */
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ─── MDX Article Prose Styling ─── */
+.prose-helios {
+  @apply font-body text-base md:text-lg leading-[1.75] text-navy/85;
+  max-width: 65ch;
+}
+
+.prose-helios h2 {
+  @apply font-display text-2xl md:text-3xl font-bold text-midnight mt-14 mb-6 leading-tight;
+}
+
+.prose-helios h3 {
+  @apply font-display text-xl md:text-2xl font-bold text-midnight mt-10 mb-4 leading-snug;
+}
+
+.prose-helios h4 {
+  @apply font-display text-lg md:text-xl font-bold text-midnight mt-8 mb-3;
+}
+
+.prose-helios p {
+  @apply mb-6;
+  max-width: 65ch;
+}
+
+.prose-helios strong {
+  @apply font-semibold text-midnight;
+}
+
+.prose-helios em {
+  @apply italic;
+}
+
+.prose-helios a {
+  @apply text-steel underline underline-offset-2 decoration-steel/30 hover:decoration-steel transition-colors duration-300;
+}
+
+.prose-helios blockquote {
+  @apply border-l-2 border-steel pl-6 my-10;
+  max-width: 60ch;
+}
+
+.prose-helios blockquote p {
+  @apply font-display text-xl md:text-2xl italic text-steel leading-snug mb-0;
+}
+
+.prose-helios ul {
+  @apply list-disc pl-6 mb-6 space-y-2;
+  max-width: 65ch;
+}
+
+.prose-helios ol {
+  @apply list-decimal pl-6 mb-6 space-y-2;
+  max-width: 65ch;
+}
+
+.prose-helios li {
+  @apply text-navy/80;
+  max-width: 65ch;
+}
+
+.prose-helios code {
+  @apply font-mono text-sm bg-navy/5 text-steel px-1.5 py-0.5 rounded-sm;
+}
+
+.prose-helios pre {
+  @apply bg-midnight text-parchment/90 p-6 overflow-x-auto my-8 text-sm leading-relaxed;
+  border-radius: 4px;
+}
+
+.prose-helios pre code {
+  @apply bg-transparent text-inherit p-0 rounded-none;
+}
+
+.prose-helios hr {
+  @apply border-t border-slate/20 my-12;
+}
+
+.prose-helios img {
+  @apply my-8 w-full;
+}
+
+.prose-helios > :first-child {
+  @apply mt-0;
+}
